@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import Title from '../components/Title';
 import { assets } from '../assets/assets';
-import CartTotal from '../components/CartTotal'; // Make sure you have this component!
+import CartTotal from '../components/CartTotal';
 
 const Cart = () => {
 
@@ -10,16 +10,17 @@ const Cart = () => {
   const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
-    // Transform the cart object into an array we can map over
     const tempData = [];
-    for (const items in cartItems) {
-      for (const item in cartItems[items]) {
-        if (cartItems[items][item] > 0) {
-          tempData.push({
-            _id: items,
-            size: item,
-            quantity: cartItems[items][item]
-          })
+    if (products.length > 0) {
+      for (const items in cartItems) {
+        for (const item in cartItems[items]) {
+          if (cartItems[items][item] > 0) {
+            tempData.push({
+              _id: items,
+              size: item,
+              quantity: cartItems[items][item]
+            })
+          }
         }
       }
     }
@@ -51,23 +52,56 @@ const Cart = () => {
                   </div>
                 </div>
                 
-                {/* Quantity Input */}
-                <input onChange={(e) => e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id, item.size, Number(e.target.value))} className='border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1' type="number" min={1} defaultValue={item.quantity} />
+                <input 
+                  onChange={(e) => e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id, item.size, Number(e.target.value))} 
+                  className='border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1' 
+                  type="number" 
+                  min={1} 
+                  defaultValue={item.quantity} 
+                />
                 
-                {/* Delete Bin Icon */}
-                <img onClick={() => updateQuantity(item._id, item.size, 0)} className='w-4 mr-4 sm:w-5 cursor-pointer' src={assets.bin_icon} alt="" />
+                <img 
+                  onClick={() => updateQuantity(item._id, item.size, 0)} 
+                  className='w-4 mr-4 sm:w-5 cursor-pointer' 
+                  src={assets.bin_icon} 
+                  alt="" 
+                />
               </div>
             )
           })
         }
       </div>
 
+      {/* --- CONDITIONAL BOTTOM SECTION --- */}
       <div className='flex justify-end my-20'>
         <div className='w-full sm:w-[450px]'>
-          <CartTotal />
-          <div className='w-full text-end'>
-            <button onClick={() => navigate('/place-order')} className='bg-black text-white text-sm my-8 px-8 py-3'>PROCEED TO CHECKOUT</button>
-          </div>
+          
+          {cartData.length > 0 ? (
+            <>
+              {/* If items exist: Show Totals and Checkout Button */}
+              <CartTotal />
+              <div className='w-full text-end'>
+                <button 
+                  onClick={() => navigate('/place-order')} 
+                  className='bg-black text-white text-sm my-8 px-8 py-3 active:bg-gray-700 transition-all'
+                >
+                  PROCEED TO CHECKOUT
+                </button>
+              </div>
+            </>
+          ) : (
+            /* If cart is empty: Show message and Continue button */
+            <div className='flex flex-col items-center gap-4 text-center py-10'>
+              <p className='text-2xl text-gray-400'>Your cart is empty</p>
+              <button 
+                onClick={() => navigate('/collection')} 
+                className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700 transition-all'
+              >
+                CONTINUE SHOPPING
+              </button>
+            </div>
+          )}
+
         </div>
       </div>
 

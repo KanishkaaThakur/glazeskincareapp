@@ -8,12 +8,12 @@ const CartTotal = () => {
     
     const amount = getCartAmount();
 
-    // --- NEW LOGIC: If amount is 0, don't show the component at all ---
+    // If cart is empty, return null so nothing (not even the title) shows up
     if (amount === 0) {
         return null;
     }
 
-    // Free shipping if amount is greater than 3000
+    // Logic: Free shipping if amount is greater than 3000
     const shippingFee = amount > 3000 ? 0 : delivery_fee;
 
     return (

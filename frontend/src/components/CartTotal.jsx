@@ -6,11 +6,15 @@ const CartTotal = () => {
 
     const { currency, delivery_fee, getCartAmount } = useContext(ShopContext);
     
-    // Get the current subtotal
     const amount = getCartAmount();
 
-    // Logic: Free shipping if cart is empty OR amount is greater than 500
-    const shippingFee = (amount === 0 || amount > 3000) ? 0 : delivery_fee;
+    // --- NEW LOGIC: If amount is 0, don't show the component at all ---
+    if (amount === 0) {
+        return null;
+    }
+
+    // Free shipping if amount is greater than 3000
+    const shippingFee = amount > 3000 ? 0 : delivery_fee;
 
     return (
         <div className='w-full'>
@@ -30,7 +34,7 @@ const CartTotal = () => {
                 </div>
                 <hr />
                 <div className='flex justify-between'>
-                    <b>Total</b>
+                    <p>Total</p>
                     <b>{currency} {amount + shippingFee}.00</b>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
+import logo from '../assets/logo.png' // Direct import is more stable for production
 import { assets } from '../assets/assets'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
@@ -42,7 +43,6 @@ const Navbar = () => {
     }, [dropdownRef]);
 
     // --- PRIVATE LOGIC ---
-    // This ONLY hides the bar if the path is exactly '/login'
     if (location.pathname === '/login') {
         return null;
     }
@@ -50,9 +50,9 @@ const Navbar = () => {
     return (
         <div className='flex items-center justify-between py-5 font-medium'>
 
-            {/* DIRECT LOGO CALL */}
+            {/* FIXED LOGO CALL */}
             <Link to='/'>
-                <img src={assets.logo} className='w-36' alt="Logo" />
+                <img src={logo} className='w-36' alt="Glaze Logo" />
             </Link>
 
             <ul className='hidden sm:flex gap-5 text-sm text-gray-700'>
@@ -76,7 +76,7 @@ const Navbar = () => {
 
             <div className='flex items-center gap-6'>
                 { location.pathname.includes('collection') && 
-                    <img onClick={() => setShowSearch(true)} src={assets.search_icon} className='w-5 cursor-pointer' alt="" />
+                    <img onClick={() => setShowSearch(true)} src={assets.search_icon} className='w-5 cursor-pointer' alt="search" />
                 }
 
                 <div ref={dropdownRef} className='group relative'>
@@ -84,7 +84,7 @@ const Navbar = () => {
                         onClick={handleProfileClick} 
                         className='w-5 cursor-pointer' 
                         src={assets.profile_icon} 
-                        alt="" 
+                        alt="profile" 
                     />
                     {token && dropdownVisible && (
                         <div className='absolute dropdown-menu right-0 pt-4 z-50'>
@@ -98,11 +98,11 @@ const Navbar = () => {
                 </div>
 
                 <Link to='/cart' className='relative'>
-                    <img src={assets.cart_icon} className='w-5 min-w-5' alt="" />
+                    <img src={assets.cart_icon} className='w-5 min-w-5' alt="cart" />
                     <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]'>{getCartCount()}</p>
                 </Link>
 
-                <img onClick={() => setVisible(true)} src={assets.menu_icon} className='w-5 cursor-pointer sm:hidden' alt="" />
+                <img onClick={() => setVisible(true)} src={assets.menu_icon} className='w-5 cursor-pointer sm:hidden' alt="menu" />
             </div>
 
             <div className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? 'w-full' : 'w-0'}`}>
